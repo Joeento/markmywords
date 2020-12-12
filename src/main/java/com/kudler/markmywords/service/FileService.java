@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +35,9 @@ public class FileService {
 
             Path copyLocation = Paths.get(destination);
             Files.copy(data, copyLocation, StandardCopyOption.REPLACE_EXISTING);
-            return new TextFileResponse(destination, "this is placeholder text");
+
+            String content = new String(file.getBytes(), StandardCharsets.UTF_8);
+            return new TextFileResponse(destination, content);
         } catch (IOException e) {
             throw new FileUploadException("Customer not found with id ");
         }
