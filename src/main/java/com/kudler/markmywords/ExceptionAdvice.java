@@ -29,6 +29,16 @@ public class ExceptionAdvice {
         return buildCustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Catch-all to handle unforseen exceptions with grace.
+     * @param ex Object containing data on the exception.
+     * @return HTTP error with message in JSON body.
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> exception(Exception ex) {
+        return buildCustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     public ResponseEntity<CustomErrorResponse> buildCustomErrorResponse(String message, HttpStatus status) {
         CustomErrorResponse error = new CustomErrorResponse(message);
         error.setStatus(status);
