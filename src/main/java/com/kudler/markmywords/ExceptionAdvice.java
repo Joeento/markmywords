@@ -24,7 +24,7 @@ public class ExceptionAdvice {
     }
 
     /**
-     * Catch-all to handle unforseen exceptions with grace.
+     * Catch-all to handle unforeseen exceptions with grace.
      * @param e Object containing data on the exception.
      * @return HTTP error with message in JSON body.
      */
