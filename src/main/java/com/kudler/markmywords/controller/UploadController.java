@@ -2,7 +2,7 @@ package com.kudler.markmywords.controller;
 
 import com.kudler.markmywords.exception.BadParameterException;
 import com.kudler.markmywords.service.FileService;
-import com.kudler.markmywords.TextFile;
+import com.kudler.markmywords.response.TextFileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,12 +16,12 @@ public class UploadController {
     FileService fileService;
 
     @PostMapping("/upload")
-    public TextFile uploadFile(@RequestParam(value = "file") MultipartFile file) {
+    public TextFileResponse uploadFile(@RequestParam(value = "file") MultipartFile file) {
         if (file.isEmpty()) {
             throw new BadParameterException("file", "file");
         }
 
-        TextFile textFile = fileService.uploadFile(file);
+        TextFileResponse textFile = fileService.uploadFile(file);
         return textFile;
     }
 }

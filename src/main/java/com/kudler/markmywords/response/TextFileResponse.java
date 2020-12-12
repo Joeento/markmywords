@@ -1,11 +1,11 @@
-package com.kudler.markmywords;
+package com.kudler.markmywords.response;
 
-public class TextFile {
+public class TextFileResponse {
 
     private final String path;
     private final String content;
 
-    public TextFile(String path, String content) {
+    public TextFileResponse(String path, String content) {
         this.path = path;
         this.content = content;
     }

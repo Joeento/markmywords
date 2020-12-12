@@ -1,4 +1,4 @@
-package com.kudler.markmywords;
+package com.kudler.markmywords.response;
 
 import org.springframework.http.HttpStatus;
 

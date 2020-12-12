@@ -1,6 +1,6 @@
 package com.kudler.markmywords.service;
 
-import com.kudler.markmywords.TextFile;
+import com.kudler.markmywords.response.TextFileResponse;
 import com.kudler.markmywords.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class FileService {
     @Value("${app.upload.dir:${user.home}}")
     public String uploadDir;
 
-    public TextFile uploadFile(MultipartFile file) {
+    public TextFileResponse uploadFile(MultipartFile file) {
         try {
             String filename = file.getOriginalFilename();
 
@@ -34,7 +34,7 @@ public class FileService {
 
             Path copyLocation = Paths.get(destination);
             Files.copy(data, copyLocation, StandardCopyOption.REPLACE_EXISTING);
-            return new TextFile(destination, "this is placeholder text");
+            return new TextFileResponse(destination, "this is placeholder text");
         } catch (IOException e) {
             throw new FileUploadException("Customer not found with id ");
         }
