@@ -1,4 +1,4 @@
-package com.kudler.markmywords;
+package com.kudler.markmywords.exception;
 
 public class FileUploadException extends RuntimeException {
 

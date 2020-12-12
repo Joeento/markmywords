@@ -1,5 +1,7 @@
 package com.kudler.markmywords;
 
+import com.kudler.markmywords.exception.BadParameterException;
+import com.kudler.markmywords.exception.FileUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

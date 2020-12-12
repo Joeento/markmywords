@@ -1,5 +1,6 @@
 package com.kudler.markmywords;
 
+import com.kudler.markmywords.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
