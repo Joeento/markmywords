@@ -2,15 +2,9 @@ package com.kudler.markmywords;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class ExceptionAdvice {
@@ -35,7 +29,7 @@ public class ExceptionAdvice {
      * @return HTTP error with message in JSON body.
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> exception(Exception ex) {
+    public ResponseEntity<CustomErrorResponse> exception(Exception e) {
         return buildCustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
