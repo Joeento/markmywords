@@ -1,6 +1,5 @@
 package com.kudler.markmywords;
 
-import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,17 +21,20 @@ public class FileService {
 
     public TextFile uploadFile(MultipartFile file) {
         try {
+            String filename = file.getOriginalFilename();
+
+            if (!filename.endsWith(".txt")) {
+                throw new FileUploadException("Sorry, text files only!  Please upload a file ending with .txt.");
+            }
+
             InputStream data = file.getInputStream();
-            String destination = uploadDir + File.separator + StringUtils.cleanPath(file.getOriginalFilename());
+            String destination = uploadDir + File.separator + StringUtils.cleanPath(filename);
 
-            Path copyLocation = Paths
-                    .get(destination);
+            Path copyLocation = Paths.get(destination);
             Files.copy(data, copyLocation, StandardCopyOption.REPLACE_EXISTING);
-
             return new TextFile(destination, "this is placeholder text");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (IOException e) {
+            throw new FileUploadException("Customer not found with id ");
         }
     }
 }
