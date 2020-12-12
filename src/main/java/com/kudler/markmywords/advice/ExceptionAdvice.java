@@ -1,5 +1,6 @@
-package com.kudler.markmywords;
+package com.kudler.markmywords.advice;
 
+import com.kudler.markmywords.CustomErrorResponse;
 import com.kudler.markmywords.exception.BadParameterException;
 import com.kudler.markmywords.exception.FileUploadException;
 import org.springframework.http.HttpStatus;

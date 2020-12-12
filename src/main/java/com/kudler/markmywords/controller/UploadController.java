@@ -1,7 +1,7 @@
 package com.kudler.markmywords.controller;
 
 import com.kudler.markmywords.exception.BadParameterException;
-import com.kudler.markmywords.FileService;
+import com.kudler.markmywords.service.FileService;
 import com.kudler.markmywords.TextFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

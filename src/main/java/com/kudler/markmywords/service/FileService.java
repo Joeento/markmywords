@@ -1,5 +1,6 @@
-package com.kudler.markmywords;
+package com.kudler.markmywords.service;
 
+import com.kudler.markmywords.TextFile;
 import com.kudler.markmywords.exception.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
