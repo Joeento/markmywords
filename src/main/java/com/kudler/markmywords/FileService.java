@@ -23,7 +23,7 @@ public class FileService {
         try {
             String filename = file.getOriginalFilename();
 
-            if (!filename.endsWith(".txt")) {
+            if (filename == null || !filename.endsWith(".txt")) {
                 throw new FileUploadException("Sorry, text files only!  Please upload a file ending with .txt.");
             }
 
