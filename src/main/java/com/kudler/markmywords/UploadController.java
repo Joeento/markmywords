@@ -14,7 +14,11 @@ public class UploadController {
     FileService fileService;
 
     @PostMapping("/upload")
-    public TextFile uploadFile(@RequestParam("file") MultipartFile file) {
+    public TextFile uploadFile(@RequestParam(value = "file") MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new BadParameterException("file", "file");
+        }
+
         TextFile textFile = fileService.uploadFile(file);
         return textFile;
     }
