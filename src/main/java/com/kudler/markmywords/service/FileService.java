@@ -39,7 +39,7 @@ public class FileService {
             String content = new String(file.getBytes(), StandardCharsets.UTF_8);
             return new TextFileResponse(destination, content);
         } catch (IOException e) {
-            throw new FileUploadException("Customer not found with id ");
+            throw new FileUploadException(e.getMessage());
         }
     }
 }
