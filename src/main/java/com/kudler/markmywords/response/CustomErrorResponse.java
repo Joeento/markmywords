@@ -4,20 +4,20 @@ import org.springframework.http.HttpStatus;
 
 public class CustomErrorResponse {
 
-    String errorMsg;
+    String message;
     HttpStatus status;
 
     public CustomErrorResponse(String errorMsg) {
         super();
-        this.errorMsg = errorMsg;
+        this.message = errorMsg;
     }
 
-    public String getErrorMsg() {
-        return errorMsg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public HttpStatus getStatus() {
