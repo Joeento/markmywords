@@ -3,13 +3,22 @@ package com.kudler.markmywords.response;
 import org.springframework.http.HttpStatus;
 
 public class CustomErrorResponse {
-
+    String type;
     String message;
     HttpStatus status;
 
-    public CustomErrorResponse(String errorMsg) {
+    public CustomErrorResponse(String type, String message) {
         super();
-        this.message = errorMsg;
+        this.type = type;
+        this.message = message;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getMessage() {

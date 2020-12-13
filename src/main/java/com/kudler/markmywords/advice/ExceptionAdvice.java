@@ -13,17 +13,17 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 public class ExceptionAdvice {
     @ExceptionHandler(value = {FileUploadException.class})
     public ResponseEntity<CustomErrorResponse> handleUploadException(FileUploadException e) {
-        return buildCustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {BadParameterException.class})
     public ResponseEntity<CustomErrorResponse> handleBadParameterException(BadParameterException e) {
-        return buildCustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<CustomErrorResponse> handleError(MaxUploadSizeExceededException e) {
-        return buildCustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -33,11 +33,11 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomErrorResponse> exception(Exception e) {
-        return buildCustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildCustomErrorResponse(e, HttpStatus.BAD_GATEWAY);
     }
 
-    public ResponseEntity<CustomErrorResponse> buildCustomErrorResponse(String message, HttpStatus status) {
-        CustomErrorResponse error = new CustomErrorResponse(message);
+    public ResponseEntity<CustomErrorResponse> buildCustomErrorResponse(Exception ex, HttpStatus status) {
+        CustomErrorResponse error = new CustomErrorResponse(ex.getClass().getSimpleName(), ex.getMessage());
         error.setStatus(status);
         return new ResponseEntity<CustomErrorResponse>(error, status);
     }
