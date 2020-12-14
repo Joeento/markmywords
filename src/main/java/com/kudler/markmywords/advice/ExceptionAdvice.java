@@ -28,11 +28,6 @@ public class ExceptionAdvice {
         return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<CustomErrorResponse> handleMissingParameterError(MissingServletRequestParameterException e) {
-        return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
-    }
-
     /**
      * Catch-all to handle unforeseen exceptions with grace.
      * @param e Object containing data on the exception.

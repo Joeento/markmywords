@@ -19,11 +19,10 @@ public class UploadController {
     MarkovService markovService;
 
     @PostMapping("/upload")
-    public MarkovChainResponse upload(@RequestParam(value = "file", required = true) MultipartFile file, @RequestParam(required = true) Integer n) {
+    public MarkovChainResponse upload(@RequestParam(value = "file", required = true) MultipartFile file, @RequestParam(required = true, defaultValue = "3") Integer n) {
         if (file.isEmpty()) {
             throw new BadParameterException("file", "file");
         }
-
         String fileContent = fileService.uploadFile(file);
         String result = markovService.chain(fileContent, n);
         return new MarkovChainResponse(fileContent, result);
