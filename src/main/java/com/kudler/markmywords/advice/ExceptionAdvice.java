@@ -22,7 +22,7 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<CustomErrorResponse> handleError(MaxUploadSizeExceededException e) {
+    public ResponseEntity<CustomErrorResponse> handleMaxSizeError(MaxUploadSizeExceededException e) {
         return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
     }
 
