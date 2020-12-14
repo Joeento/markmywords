@@ -2,9 +2,7 @@ package com.kudler.markmywords.service;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MarkovService {
@@ -22,7 +20,52 @@ public class MarkovService {
             prefixes.get(prefix).add(suffix);
         }
 
+        return prefixes;
+    }
+
+    public String generate(Map<String, ArrayList<Character>> prefixes, int size, String text) {
+        String prefix = text.substring(0, size);
+        StringBuilder result = new StringBuilder();
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(prefixes.get(prefix).size());
+        char suffix = prefixes.get(prefix).get(randomIndex);
+        result.append(prefix);
+        result.append(suffix);
+
+        while (suffix != NONWORD) {
+            prefix = result.substring(result.length() - size, result.length());
+            ArrayList suffixes = prefixes.get(prefix);
+            if (suffixes == null || suffixes.size() == 0) {
+                break;
+            }
+
+            randomIndex = random.nextInt(prefixes.get(prefix).size());
+            suffix = prefixes.get(prefix).get(randomIndex);
+            result.append(suffix);
+        }
+
         /*
+        result.append(result);
+
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            List<Character> suffixes = prefixes.get(prefix);
+            if (suffixes == null  || suffixes.size() == 0) {
+                break;
+            }
+            char suffix = suffixes.get(random.nextInt(suffixes.size()));
+
+        }
+         */
+        return result.toString();
+    }
+
+    public String chain(String text, int size) {
+        return generate(buildPrefixTable(text, size), size, text);
+    }
+
+    public void printPrefixTable(Map<String, ArrayList<Character>> prefixes) {
         for (Map.Entry<String, ArrayList<Character>> entry : prefixes.entrySet()) {
             String values = "";
             for (int i = 0; i < entry.getValue().size(); i++) {
@@ -30,7 +73,5 @@ public class MarkovService {
             }
             System.out.println("Key = '" + entry.getKey() + "', Value = '" + values +"'");
         }
-         */
-        return prefixes;
     }
 }
