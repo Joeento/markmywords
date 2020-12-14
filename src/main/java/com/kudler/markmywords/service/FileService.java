@@ -22,7 +22,7 @@ public class FileService {
     @Value("${app.upload.dir:${user.home}}")
     public String uploadDir;
 
-    public TextFileResponse uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         try {
             String filename = file.getOriginalFilename();
 
@@ -37,7 +37,7 @@ public class FileService {
             Files.copy(data, copyLocation, StandardCopyOption.REPLACE_EXISTING);
 
             String content = new String(file.getBytes(), StandardCharsets.UTF_8);
-            return new TextFileResponse(destination, content);
+            return content;
         } catch (IOException e) {
             throw new FileUploadException(e.getMessage());
         }
