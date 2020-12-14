@@ -37,8 +37,7 @@ public class ExceptionAdvice {
     }
 
     public ResponseEntity<CustomErrorResponse> buildCustomErrorResponse(Exception ex, HttpStatus status) {
-        CustomErrorResponse error = new CustomErrorResponse(ex.getClass().getSimpleName(), ex.getMessage());
-        error.setStatus(status);
+        CustomErrorResponse error = new CustomErrorResponse(ex.getClass().getSimpleName(), ex.getMessage(), status);
         return new ResponseEntity<CustomErrorResponse>(error, status);
     }
 }
