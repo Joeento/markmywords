@@ -5,27 +5,36 @@ import com.kudler.markmywords.exception.BadParameterException;
 import com.kudler.markmywords.exception.FileUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.multipart.MultipartException;
 
 @RestControllerAdvice
 public class ExceptionAdvice {
     @ExceptionHandler(value = {FileUploadException.class})
     public ResponseEntity<CustomErrorResponse> handleUploadException(FileUploadException e) {
-        return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
+        return buildCustomErrorResponse(e.getClass().getSimpleName(), e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {BadParameterException.class})
-    public ResponseEntity<CustomErrorResponse> handleBadParameterException(BadParameterException e) {
-        return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(value = {BadParameterException.class, MultipartException.class})
+    public ResponseEntity<CustomErrorResponse> handleBadParameterException(Exception e) {
+        return buildCustomErrorResponse(e.getClass().getSimpleName(), e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ExceptionHandler(value = {MaxUploadSizeExceededException.class})
     public ResponseEntity<CustomErrorResponse> handleMaxSizeError(MaxUploadSizeExceededException e) {
-        return buildCustomErrorResponse(e, HttpStatus.BAD_REQUEST);
+        return buildCustomErrorResponse(e.getClass().getSimpleName(), e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<CustomErrorResponse> handleParameterTypeMismatch(MethodArgumentTypeMismatchException e) {
+        String fieldName = e.getName();
+        String fieldType = e.getRequiredType().getSimpleName();
+        String message = "Sorry, '" + fieldName + "' should be of type '" + fieldType + "'.";
+
+        return buildCustomErrorResponse(e.getClass().getSimpleName(), message , HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -35,11 +44,11 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomErrorResponse> exception(Exception e) {
-        return buildCustomErrorResponse(e, HttpStatus.BAD_GATEWAY);
+        return buildCustomErrorResponse(e.getMessage(), e.getClass().getSimpleName(), HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<CustomErrorResponse> buildCustomErrorResponse(Exception ex, HttpStatus status) {
-        CustomErrorResponse error = new CustomErrorResponse(ex.getClass().getSimpleName(), ex.getMessage(), status);
+    public ResponseEntity<CustomErrorResponse> buildCustomErrorResponse(String type, String message, HttpStatus status) {
+        CustomErrorResponse error = new CustomErrorResponse(type, message, status);
         return new ResponseEntity<CustomErrorResponse>(error, status);
     }
 }
