@@ -21,7 +21,8 @@ public class UploadController {
     @PostMapping("/upload")
     public MarkovChainResponse upload(@RequestParam(value = "file", required = true) MultipartFile file, @RequestParam(defaultValue = "3") Integer n) {
         if (file.isEmpty()) {
-            throw new BadParameterException("Sorry, one of your parameters was invalid.  Please make sure you have a 'file' field of type 'File'");
+            throw new BadParameterException("Sorry, one of your parameters was invalid.  " +
+                    "Please make sure you have a 'file' field of type 'File'");
         }
 
         if (n < 1) {
