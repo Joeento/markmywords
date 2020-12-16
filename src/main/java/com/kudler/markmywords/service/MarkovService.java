@@ -8,7 +8,7 @@ import java.util.*;
 @Service
 public class MarkovService {
 
-    public static final String NONWORD = "\n";
+    public static final String NONWORD = "NONWORD";
     public static final String DELIMITER_REGEX = "\\s+";
 
     public Map<String, ArrayList<String>> buildPrefixTable(String text, int size) {
