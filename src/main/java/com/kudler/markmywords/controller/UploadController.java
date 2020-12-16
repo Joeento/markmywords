@@ -20,7 +20,7 @@ public class UploadController {
 
     @PostMapping("/upload")
     public MarkovChainResponse upload(@RequestParam(value = "file", required = true) MultipartFile file,
-                                      @RequestParam(defaultValue = "3", required = false) Integer n,
+                                      @RequestParam(defaultValue = "1", required = false) Integer n,
                                       @RequestParam(defaultValue = "0", required = false) Integer length,
                                       @RequestParam(required = false) String prefix) {
         if (file.isEmpty()) {
