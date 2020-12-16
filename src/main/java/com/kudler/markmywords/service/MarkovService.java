@@ -38,13 +38,13 @@ public class MarkovService {
         result.append(prefix);
         result.append(" ");
         result.append(suffix);
-        while (suffix != NONWORD) {
+        while (!suffix.equals(NONWORD)) {
             String[] previousPrefixWords = prefix.split(DELIMITER_REGEX);
             String previousPrefixOffset = buildPrefixString(previousPrefixWords, 1, previousPrefixWords.length);
             StringBuilder prefixBuilder = new StringBuilder();
             prefixBuilder.append(previousPrefixOffset);
 
-            if (size > 1 && !suffix.equals(NONWORD)) {
+            if (size > 1) {
                 prefixBuilder.append(" ");
             }
 
