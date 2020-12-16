@@ -19,7 +19,7 @@ public class UploadController {
     MarkovService markovService;
 
     @PostMapping("/upload")
-    public MarkovChainResponse upload(@RequestParam(value = "file", required = true) MultipartFile file,
+    public MarkovChainResponse upload(@RequestParam(required = true) MultipartFile file,
                                       @RequestParam(defaultValue = "1", required = false) Integer n,
                                       @RequestParam(defaultValue = "0", required = false) Integer length,
                                       @RequestParam(required = false) String prefix) {
@@ -40,7 +40,7 @@ public class UploadController {
 
 
         String fileContent = fileService.uploadFile(file);
-        String[] words = fileContent.split(markovService.DELIMITER_REGEX);
+        String[] words = fileContent.split(MarkovService.DELIMITER_REGEX);
         if (n > words.length) {
             throw new BadParameterException("Sorry, you can't have a prefix larger than the size of your text.");
         }

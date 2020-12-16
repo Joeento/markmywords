@@ -31,8 +31,13 @@ public class ExceptionAdvice {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<CustomErrorResponse> handleParameterTypeMismatch(MethodArgumentTypeMismatchException e) {
         String fieldName = e.getName();
-        String fieldType = e.getRequiredType().getSimpleName();
-        String message = "Sorry, '" + fieldName + "' should be of type '" + fieldType + "'.";
+        String message;
+        if (e.getRequiredType() == null) {
+            message = "Sorry, '" + fieldName + "' is an incorrect type.";
+        } else {
+            String fieldType = e.getRequiredType().getSimpleName();
+            message = "Sorry, '" + fieldName + "' should be of type '" + fieldType + "'.";
+        }
 
         return buildCustomErrorResponse(e.getClass().getSimpleName(), message , HttpStatus.BAD_REQUEST);
     }
@@ -49,6 +54,6 @@ public class ExceptionAdvice {
 
     public ResponseEntity<CustomErrorResponse> buildCustomErrorResponse(String type, String message, HttpStatus status) {
         CustomErrorResponse error = new CustomErrorResponse(type, message, status);
-        return new ResponseEntity<CustomErrorResponse>(error, status);
+        return new ResponseEntity<>(error, status);
     }
 }
