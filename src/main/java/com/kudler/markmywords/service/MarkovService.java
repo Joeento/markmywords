@@ -1,5 +1,6 @@
 package com.kudler.markmywords.service;
 
+import com.kudler.markmywords.exception.BadParameterException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,13 +27,19 @@ public class MarkovService {
         return prefixes;
     }
 
-    public String generate(String text, int size, int maxWords) {
+    public String chain(String text, int size, int maxWords, String prefix) {
         String[] words = text.split(DELIMITER_REGEX);
-        String prefix = buildPrefixString(words, 0, size);
         StringBuilder result = new StringBuilder();
         Random random = new Random();
 
+        prefix = (prefix == null) ? buildPrefixString(words, 0, size) :  prefix;
         Map<String, ArrayList<String>> prefixes = buildPrefixTable(text, size);
+
+        if (!prefixes.containsKey(prefix)) {
+            throw new BadParameterException("Sorry, your prefix needs to appear at least once in the text document " +
+                    "and contain exactly " + size + " words.  To use a default prefix, leave out the 'prefix' field.");
+        }
+
         ArrayList<String> suffixes = prefixes.get(prefix);
         int randomIndex = random.nextInt(suffixes.size());
         String suffix = suffixes.get(randomIndex);
@@ -71,10 +78,6 @@ public class MarkovService {
 
         }
         return result.toString();
-    }
-
-    public String chain(String text, int size, int length) {
-        return generate(text, size, length);
     }
 
     public String buildPrefixString(String[] words, int start, int end) {

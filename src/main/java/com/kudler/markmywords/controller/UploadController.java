@@ -19,7 +19,10 @@ public class UploadController {
     MarkovService markovService;
 
     @PostMapping("/upload")
-    public MarkovChainResponse upload(@RequestParam(value = "file", required = true) MultipartFile file, @RequestParam(defaultValue = "3") Integer n, @RequestParam(defaultValue = "0") Integer length) {
+    public MarkovChainResponse upload(@RequestParam(value = "file", required = true) MultipartFile file,
+                                      @RequestParam(defaultValue = "3", required = false) Integer n,
+                                      @RequestParam(defaultValue = "0", required = false) Integer length,
+                                      @RequestParam(required = false) String prefix) {
         if (file.isEmpty()) {
             throw new BadParameterException("Sorry, one of your parameters was invalid.  " +
                     "Please make sure you have a 'file' field of type 'File'");
@@ -35,13 +38,14 @@ public class UploadController {
                     "include it.");
         }
 
+
         String fileContent = fileService.uploadFile(file);
         String[] words = fileContent.split(markovService.DELIMITER_REGEX);
         if (n > words.length) {
             throw new BadParameterException("Sorry, you can't have a prefix larger than the size of your text.");
         }
 
-        String result = markovService.chain(fileContent, n, length);
+        String result = markovService.chain(fileContent, n, length, prefix);
         return new MarkovChainResponse(fileContent, result);
     }
 }
