@@ -24,8 +24,8 @@ public class UploadController {
             throw new BadParameterException("Sorry, one of your parameters was invalid.  Please make sure you have a 'file' field of type 'File'");
         }
 
-        if (file.isEmpty()) {
-            throw new BadParameterException("Sorry, one of your parameters was invalid.  Please make sure you have a 'file' field of type 'File'");
+        if (n < 1) {
+            throw new BadParameterException("Sorry, your prefix size must be one or greater.");
         }
 
         String fileContent = fileService.uploadFile(file);
