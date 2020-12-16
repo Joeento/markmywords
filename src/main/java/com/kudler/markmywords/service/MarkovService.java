@@ -39,7 +39,6 @@ public class MarkovService {
         result.append(" ");
         result.append(suffix);
         while (suffix != NONWORD) {
-            //consider rewriting by getting a substring of everything after first space.
             String[] previousPrefixWords = prefix.split(DELIMITER_REGEX);
             String previousPrefixOffset = buildPrefixString(previousPrefixWords, 1, previousPrefixWords.length);
             StringBuilder prefixBuilder = new StringBuilder();
