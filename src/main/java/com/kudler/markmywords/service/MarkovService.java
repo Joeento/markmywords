@@ -26,7 +26,7 @@ public class MarkovService {
         return prefixes;
     }
 
-    public String generate(Map<String, ArrayList<String>> prefixes, int size, String text) {
+    public String generate(Map<String, ArrayList<String>> prefixes, int size, String text, int maxWords) {
         String[] words = text.split(DELIMITER_REGEX);
         String prefix = buildPrefixString(words, 0, size);
         StringBuilder result = new StringBuilder();
@@ -38,7 +38,9 @@ public class MarkovService {
         result.append(prefix);
         result.append(" ");
         result.append(suffix);
-        while (!suffix.equals(NONWORD)) {
+
+        int wordsAdded = size + 1;
+        while (!suffix.equals(NONWORD) && (maxWords < 1 || wordsAdded < maxWords)) {
             String[] previousPrefixWords = prefix.split(DELIMITER_REGEX);
             String previousPrefixOffset = buildPrefixString(previousPrefixWords, 1, previousPrefixWords.length);
             StringBuilder prefixBuilder = new StringBuilder();
@@ -50,6 +52,7 @@ public class MarkovService {
 
             prefixBuilder.append(suffix);
             prefix = prefixBuilder.toString();
+
             suffixes = prefixes.get(prefix);
             if (suffixes == null || suffixes.size() == 0) {
                 break;
@@ -63,23 +66,14 @@ public class MarkovService {
 
             result.append(" ");
             result.append(suffix);
-        }
+            wordsAdded++;
 
+        }
         return result.toString();
     }
 
-    public String chain(String text, int size) {
-        return generate(buildPrefixTable(text, size), size, text);
-    }
-
-    public void printPrefixTable(Map<String, ArrayList<String>> prefixes) {
-        for (Map.Entry<String, ArrayList<String>> entry : prefixes.entrySet()) {
-            String values = "";
-            for (int i = 0; i < entry.getValue().size(); i++) {
-                values += entry.getValue().get(i) + ",";
-            }
-            System.out.println("Key = '" + entry.getKey() + "', Value = '" + values +"'");
-        }
+    public String chain(String text, int size, int length) {
+        return generate(buildPrefixTable(text, size), size, text, length);
     }
 
     public String buildPrefixString(String[] words, int start, int end) {
