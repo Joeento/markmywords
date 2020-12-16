@@ -25,7 +25,7 @@ public class UploadController {
                                       @RequestParam(required = false) String prefix) {
         if (file.isEmpty()) {
             throw new BadParameterException("Sorry, one of your parameters was invalid.  " +
-                    "Please make sure you have a 'file' field of type 'File'");
+                    "Please make sure you have a 'file' field of type 'File' that contains at least one word.");
         }
 
         if (n < 1) {
