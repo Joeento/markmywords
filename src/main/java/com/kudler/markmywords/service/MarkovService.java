@@ -7,15 +7,18 @@ import java.util.*;
 @Service
 public class MarkovService {
 
-    public static final char NONWORD = '\n';
+    public static final String NONWORD = "\n";
+    public static final String DELIMITER_REGEX = "\\s+";
 
-    public Map<String, ArrayList<Character>> buildPrefixTable(String text, int size) {
-        Map<String, ArrayList<Character>> prefixes = new HashMap<String, ArrayList<Character>>();
-        for (int i = 0; i <= text.length() - size; i++) {
-            String prefix = text.substring(i, i + size);
-            char suffix = (i + size < text.length()) ? text.charAt(i + size) : NONWORD;
+    public Map<String, ArrayList<String>> buildPrefixTable(String text, int size) {
+        String[] words = text.split(DELIMITER_REGEX);
+        Map<String, ArrayList<String>> prefixes = new HashMap<String, ArrayList<String>>();
+
+        for (int i = 0; i <= words.length - size; i++) {
+            String prefix = buildPrefixString(words, i, i + size);
+            String suffix = (i + size < words.length) ? words[i + size] : NONWORD;
             if (!prefixes.containsKey(prefix)) {
-                prefixes.put(prefix, new ArrayList<Character>());
+                prefixes.put(prefix, new ArrayList<String>());
             }
             prefixes.get(prefix).add(suffix);
         }
@@ -23,41 +26,46 @@ public class MarkovService {
         return prefixes;
     }
 
-    public String generate(Map<String, ArrayList<Character>> prefixes, int size, String text) {
-        String prefix = text.substring(0, size);
+    public String generate(Map<String, ArrayList<String>> prefixes, int size, String text) {
+        String[] words = text.split(DELIMITER_REGEX);
+        String prefix = buildPrefixString(words, 0, size);
         StringBuilder result = new StringBuilder();
-
         Random random = new Random();
-        int randomIndex = random.nextInt(prefixes.get(prefix).size());
-        char suffix = prefixes.get(prefix).get(randomIndex);
-        result.append(prefix);
-        result.append(suffix);
 
+        ArrayList<String> suffixes = prefixes.get(prefix);
+        int randomIndex = random.nextInt(suffixes.size());
+        String suffix = suffixes.get(randomIndex);
+        result.append(prefix);
+        result.append(" ");
+        result.append(suffix);
         while (suffix != NONWORD) {
-            prefix = result.substring(result.length() - size, result.length());
-            ArrayList suffixes = prefixes.get(prefix);
+            //consider rewriting by getting a substring of everything after first space.
+            String[] previousPrefixWords = prefix.split(DELIMITER_REGEX);
+            String previousPrefixOffset = buildPrefixString(previousPrefixWords, 1, previousPrefixWords.length);
+            StringBuilder prefixBuilder = new StringBuilder();
+            prefixBuilder.append(previousPrefixOffset);
+
+            if (size > 1 && !suffix.equals(NONWORD)) {
+                prefixBuilder.append(" ");
+            }
+
+            prefixBuilder.append(suffix);
+            prefix = prefixBuilder.toString();
+            suffixes = prefixes.get(prefix);
             if (suffixes == null || suffixes.size() == 0) {
                 break;
             }
 
-            randomIndex = random.nextInt(prefixes.get(prefix).size());
-            suffix = prefixes.get(prefix).get(randomIndex);
+            randomIndex = random.nextInt(suffixes.size());
+            suffix = suffixes.get(randomIndex);
+            if (suffix.equals(NONWORD)) {
+                break;
+            }
+
+            result.append(" ");
             result.append(suffix);
         }
 
-        /*
-        result.append(result);
-
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            List<Character> suffixes = prefixes.get(prefix);
-            if (suffixes == null  || suffixes.size() == 0) {
-                break;
-            }
-            char suffix = suffixes.get(random.nextInt(suffixes.size()));
-
-        }
-         */
         return result.toString();
     }
 
@@ -65,13 +73,17 @@ public class MarkovService {
         return generate(buildPrefixTable(text, size), size, text);
     }
 
-    public void printPrefixTable(Map<String, ArrayList<Character>> prefixes) {
-        for (Map.Entry<String, ArrayList<Character>> entry : prefixes.entrySet()) {
+    public void printPrefixTable(Map<String, ArrayList<String>> prefixes) {
+        for (Map.Entry<String, ArrayList<String>> entry : prefixes.entrySet()) {
             String values = "";
             for (int i = 0; i < entry.getValue().size(); i++) {
                 values += entry.getValue().get(i) + ",";
             }
             System.out.println("Key = '" + entry.getKey() + "', Value = '" + values +"'");
         }
+    }
+
+    public String buildPrefixString(String[] words, int start, int end) {
+        return String.join(" ", Arrays.copyOfRange(words, start, end));
     }
 }

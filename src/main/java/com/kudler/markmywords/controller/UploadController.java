@@ -29,8 +29,9 @@ public class UploadController {
         }
 
         String fileContent = fileService.uploadFile(file);
-        if (n > fileContent.length()) {
-            throw new BadParameterException("Sorry, you can't have an 'n' value larger than the length of your text.");
+        String[] words = fileContent.split(markovService.DELIMITER_REGEX);
+        if (n > words.length) {
+            throw new BadParameterException("Sorry, you can't have a prefix larger than the size of your text.");
         }
 
         String result = markovService.chain(fileContent, n);
