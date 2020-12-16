@@ -26,12 +26,13 @@ public class MarkovService {
         return prefixes;
     }
 
-    public String generate(Map<String, ArrayList<String>> prefixes, int size, String text, int maxWords) {
+    public String generate(String text, int size, int maxWords) {
         String[] words = text.split(DELIMITER_REGEX);
         String prefix = buildPrefixString(words, 0, size);
         StringBuilder result = new StringBuilder();
         Random random = new Random();
 
+        Map<String, ArrayList<String>> prefixes = buildPrefixTable(text, size);
         ArrayList<String> suffixes = prefixes.get(prefix);
         int randomIndex = random.nextInt(suffixes.size());
         String suffix = suffixes.get(randomIndex);
@@ -73,7 +74,7 @@ public class MarkovService {
     }
 
     public String chain(String text, int size, int length) {
-        return generate(buildPrefixTable(text, size), size, text, length);
+        return generate(text, size, length);
     }
 
     public String buildPrefixString(String[] words, int start, int end) {
