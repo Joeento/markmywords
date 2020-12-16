@@ -44,9 +44,12 @@ public class MarkovService {
         int randomIndex = random.nextInt(suffixes.size());
         String suffix = suffixes.get(randomIndex);
         result.append(prefix);
+        if (suffix.equals(NONWORD)) {
+            return result.toString();
+        }
+
         result.append(" ");
         result.append(suffix);
-
         int wordsAdded = size + 1;
         while (!suffix.equals(NONWORD) && (maxWords < 1 || wordsAdded < maxWords)) {
             String[] previousPrefixWords = prefix.split(DELIMITER_REGEX);
