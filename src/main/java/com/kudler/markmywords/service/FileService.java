@@ -35,8 +35,7 @@ public class FileService {
             Path copyLocation = Paths.get(destination);
             Files.copy(data, copyLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            String content = new String(file.getBytes(), StandardCharsets.UTF_8);
-            return content;
+            return new String(file.getBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new FileUploadException(e.getMessage());
         }

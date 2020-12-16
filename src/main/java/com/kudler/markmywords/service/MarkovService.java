@@ -13,13 +13,13 @@ public class MarkovService {
 
     public Map<String, ArrayList<String>> buildPrefixTable(String text, int size) {
         String[] words = text.split(DELIMITER_REGEX);
-        Map<String, ArrayList<String>> prefixes = new HashMap<String, ArrayList<String>>();
+        Map<String, ArrayList<String>> prefixes = new HashMap<>();
 
         for (int i = 0; i <= words.length - size; i++) {
             String prefix = buildPrefixString(words, i, i + size);
             String suffix = (i + size < words.length) ? words[i + size] : NONWORD;
             if (!prefixes.containsKey(prefix)) {
-                prefixes.put(prefix, new ArrayList<String>());
+                prefixes.put(prefix, new ArrayList<>());
             }
             prefixes.get(prefix).add(suffix);
         }
