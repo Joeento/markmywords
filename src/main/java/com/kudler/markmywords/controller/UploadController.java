@@ -29,9 +29,9 @@ public class UploadController {
      * a text file and some optional parameters to be transformed
      * via Markov chain.
      * @param file File containing text that will used to create chain
-     * @param n Size of the ngram, which determines how many
-     *          adjacent words must be grouped together to create a
-     *          prefix, defaults to 1
+     * @param n Size of the prefix, which determines how many
+     *               adjacent words must be grouped together to create a
+     *               prefix, defaults to 1
      * @param length Number of words in the markov chain.  If length < 1,
      *               the chain will continue to run until it chooses the
      *               last word in the original string.
