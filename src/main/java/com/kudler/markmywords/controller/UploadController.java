@@ -38,7 +38,7 @@ public class UploadController {
      * @param prefix The words that will begin the markov chain.
      *               If empty, the chain will begin with the text
      *               file's first "n" words.
-     * @return MarkovChainResponse An object containing both our
+     * @return An object containing both our
      *               original text string from the uploaded file,
      *               and the Markov Chain generated
      */
