@@ -5,8 +5,7 @@
 ### Intro
 Markov Chains are a great thought experiment
 ### Endpoint
-The most important part of our API our exposed endpoint.  Below, you will find the documentation of generating a chain,     
-including the URL, parameters and response.
+The most important part of our API our exposed endpoint.  Below, you will find the documentation of generating a chain, including the URL, parameters and response.
 
 * **URL**
 
@@ -45,7 +44,7 @@ including the URL, parameters and response.
 
 ### Components
 MarkMyWords can basically be broken down into 3 parts: the *controller*, the services, and the error handling.  Since we are building a RESTful API, the controller only needs to serve an endpoint that receives parameters and sends back the result.  The *services* are designed to help the controller handle any business logic- such as generating the Markov Chain - without needing any data on our server's state.  If we wanted to, we could even generate chains using other     
-input sources, without needing to change the MarkovService class at all.  Finally, we have the exceptions.  Normally in an application, we catch exceptions inside of the methods that invoke Throwables.  However, when the user only has access to one entrypoint in our application, it doesn't really matter much to them what piece failed.  As such, in this project we use Spring's `@RestControllerAdvice` to create a central class for catching exceptions and turning them into  JSON response.
+input sources, without needing to change the MarkovService class at all.  Finally, we have the exceptions.  Normally in an application, we catch exceptions inside of the methods that invoke Throwables.  However, when the user only has access to one entrypoint in our application, it doesn't really matter much to them what piece failed.  As such, in this project we use Spring's @RestControllerAdvice to create a central class for catching exceptions and turning them into  JSON response.
 
 ### Things to do
 Unfortunately, as with many projects, there were some cool features that I didn't come up with until it was too late to     
