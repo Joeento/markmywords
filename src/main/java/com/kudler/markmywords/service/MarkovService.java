@@ -20,7 +20,18 @@ public class MarkovService {
     // to determine which character denote the end of a word. "\\s+"
     // translates to "any number of whitespace characters in a row".
     public static final String DELIMITER_REGEX = "\\s+";
-
+    
+    /**
+     * Generate a Markov Chain by creating a prefix, and then
+     * appending suffixes to it one at a time until we reach
+     * our word limit or we reach randomly choose the last word in
+     * the source string.
+     * @param text Source string that will be transformed
+     * @param size Number of words to use as a prefix
+     * @param maxWords Upper bound on when to terminate Markov string.
+     * @param prefix optional string to start our transformation.
+     * @return String of words representing our generated Markov Chain
+     */
     public String chain(String text, int size, int maxWords, String prefix) {
         String[] words = text.split(DELIMITER_REGEX);
         StringBuilder result = new StringBuilder();
@@ -110,11 +121,11 @@ public class MarkovService {
     }
 
     /**
-     * Helper method to simplify grouping words together to form a prefix.
+     * Helper method to abstract grouping words together to form a prefix.
      * @param words Array of every word in a text string, separated by whitespace.
      * @param start First index in subarray that we will be concatenating, inclusive
      * @param end Last index of subarray, exclusive
-     * @return
+     * @return String concatenating all words from start to end with a whitespace.
      */
     public String buildPrefixString(String[] words, int start, int end) {
         return String.join(" ", Arrays.copyOfRange(words, start, end));
