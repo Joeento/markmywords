@@ -5,27 +5,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Service designed to take in text strings from any
+ * source and create Markov Chains out of them.
+ */
 @Service
 public class MarkovService {
 
+    // Unlike C, Java does not have an END_OF_STRING character,
+    // so I made my own variable to indicate there's no words left
     public static final String NONWORD = "NONWORD";
+
+    // Since we are splitting our text into words, we need a regex
+    // to determine which character denote the end of a word. "\\s+"
+    // translates to "any number of whitespace characters in a row".
     public static final String DELIMITER_REGEX = "\\s+";
-
-    public Map<String, ArrayList<String>> buildPrefixTable(String text, int size) {
-        String[] words = text.split(DELIMITER_REGEX);
-        Map<String, ArrayList<String>> prefixes = new HashMap<>();
-
-        for (int i = 0; i <= words.length - size; i++) {
-            String prefix = buildPrefixString(words, i, i + size);
-            String suffix = (i + size < words.length) ? words[i + size] : NONWORD;
-            if (!prefixes.containsKey(prefix)) {
-                prefixes.put(prefix, new ArrayList<>());
-            }
-            prefixes.get(prefix).add(suffix);
-        }
-
-        return prefixes;
-    }
 
     public String chain(String text, int size, int maxWords, String prefix) {
         String[] words = text.split(DELIMITER_REGEX);
@@ -73,6 +67,38 @@ public class MarkovService {
             suffix = suffixes.get(randomIndex);
             if (suffix.equals(NONWORD)) {
                 break;
+    /**
+     * Helper method to create data structure containing
+     * every adjacent word grouping - or "prefix" in our
+     * text string, then matching them with their
+     * following word - or "suffix".  Traditionally,
+     * prefixes and suffixes are mapped via matrix, but
+     * we will keep our prefixes indexed in a hashtable, so that
+     * access to a suffix list will be O(1).
+     *
+     * @param text The text that will be broken down into a HashMap
+     *             of prefixes as keys, and a list of suffixes
+     *             as values.
+     * @param size The size of each prefix.  For example, if
+     *             size=2, every 2 adjacent words will grouped
+     *             and used as keys in the table.
+     * @return A HashMap containing every possible of word
+     *              grouping in "text" of size "size".  Each key in the
+     *              table points to an array list containing the succeeding word
+     *              from the original "text" string.
+     */
+    public Map<String, ArrayList<String>> buildPrefixTable(String text, int size) {
+        String[] words = text.split(DELIMITER_REGEX);
+        Map<String, ArrayList<String>> prefixes = new HashMap<>();
+
+        for (int i = 0; i <= words.length - size; i++) {
+            // Build the prefix string by grouping every word from "i" to the end of the prefix size
+            String prefix = buildPrefixString(words, i, i + size);
+            // The suffix will be the word following the end of the prefix.
+            // If there is not one, use NONWORD to denote the termination of the string.
+            String suffix = (i + size < words.length) ? words[i + size] : NONWORD;
+            if (!prefixes.containsKey(prefix)) {
+                prefixes.put(prefix, new ArrayList<>());
             }
 
             result.append(" ");
@@ -83,6 +109,13 @@ public class MarkovService {
         return result.toString();
     }
 
+    /**
+     * Helper method to simplify grouping words together to form a prefix.
+     * @param words Array of every word in a text string, separated by whitespace.
+     * @param start First index in subarray that we will be concatenating, inclusive
+     * @param end Last index of subarray, exclusive
+     * @return
+     */
     public String buildPrefixString(String[] words, int start, int end) {
         return String.join(" ", Arrays.copyOfRange(words, start, end));
     }
