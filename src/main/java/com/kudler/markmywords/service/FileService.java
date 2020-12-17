@@ -15,16 +15,32 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * Service designed to contain any actions
+ * related to reading adn writing to files.
+ * Used by the UploadController to make a copy of
+ * the uploaded file on the disc.
+ */
+
 @Service
 public class FileService {
-
+    //If app.upload.dir is set in application properties,
+    //use the user's home directory.
     @Value("${app.upload.dir:${user.home}}")
     public String uploadDir;
 
+    /**
+     * Method for copying a file from a controller onto the disc,
+     * and then opening it and returning the data.
+     * @param file Any data on the uploaded file as well as it's temporary location.
+     * @return Contents of file read into a String.
+     * @throws FileUploadException When an error occurs with reading/writing the file on the disc
+     */
     public String uploadFile(MultipartFile file) {
         try {
             String filename = file.getOriginalFilename();
 
+            // Only accept text files, otherwise exit with an error message
             if (filename == null || !filename.endsWith(".txt")) {
                 throw new FileUploadException("Sorry, text files only!  Please upload a file ending with .txt.");
             }
@@ -32,11 +48,14 @@ public class FileService {
             InputStream data = file.getInputStream();
             String destination = uploadDir + File.separator + StringUtils.cleanPath(filename);
 
+            // Copy file from it's temporary location into the servers uploads directory
             Path copyLocation = Paths.get(destination);
             Files.copy(data, copyLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return new String(file.getBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
+            // Instead of an IOException, we throw a custom-made
+            // RuntimeException that's easier for the user to understand
             throw new FileUploadException(e.getMessage());
         }
     }
