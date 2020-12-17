@@ -69,6 +69,8 @@ public class ExceptionAdvice {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<CustomErrorResponse> handleParameterTypeMismatch(MethodArgumentTypeMismatchException e) {
         String fieldName = e.getName();
+
+        // Just in case getRequiredType() returns null, we prepare a more vague error message,
         String message;
         if (e.getRequiredType() == null) {
             message = "Sorry, '" + fieldName + "' is an incorrect type.";

@@ -2,6 +2,10 @@ package com.kudler.markmywords.response;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * Class of data that we need collected and serialized
+ * into a JSON HTTP response when an exception occurs.
+ */
 public class CustomErrorResponse {
     private final String type;
     private final String message;

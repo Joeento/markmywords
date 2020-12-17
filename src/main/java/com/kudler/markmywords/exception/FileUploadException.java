@@ -2,8 +2,8 @@ package com.kudler.markmywords.exception;
 
 /**
  * Used to pass on capture and pass on information
- * about errors that occur during file upload
- * incorrectly formatted or missing.
+ * about errors that occur during file upload,
+ * such as read/write errors.
  */
 public class FileUploadException extends RuntimeException {
 

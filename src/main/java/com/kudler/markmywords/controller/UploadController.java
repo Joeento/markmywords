@@ -62,14 +62,14 @@ public class UploadController {
                     "include it.");
         }
 
-        //Service for uploading the file and returning the text inside
+        // Service for uploading the file and returning the text inside
         String fileContent = fileService.uploadFile(file);
         String[] words = fileContent.split(MarkovService.DELIMITER_REGEX);
         if (n > words.length) {
             throw new BadParameterException("Sorry, you can't have a prefix larger than the size of your text.");
         }
 
-        //Generate the Markov Chain using the service, then return it as a JSON
+        // Generate the Markov Chain using the service, then return it as a JSON
         String result = markovService.chain(fileContent, n, length, prefix);
         return new MarkovChainResponse(fileContent, result);
     }
