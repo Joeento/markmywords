@@ -17,7 +17,7 @@ import java.nio.file.StandardCopyOption;
 
 /**
  * Service designed to contain any actions
- * related to reading adn writing to files.
+ * related to reading and writing to files.
  * Used by the UploadController to make a copy of
  * the uploaded file on the disc.
  */
@@ -32,7 +32,7 @@ public class FileService {
     /**
      * Method for copying a file from a controller onto the disc,
      * and then opening it and returning the data.
-     * @param file Any data on the uploaded file as well as it's temporary location.
+     * @param file Any data in the uploaded file as well as it's temporary location.
      * @return Contents of file read into a String.
      * @throws FileUploadException When an error occurs with reading/writing the file on the disc
      */

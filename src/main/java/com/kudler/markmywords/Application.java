@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
 	/**
 	 * Begin running server.
-	 * @param args arguments for webserver to start.
+	 * @param args arguments for webserver to start
 	 */
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

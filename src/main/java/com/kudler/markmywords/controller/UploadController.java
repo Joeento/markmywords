@@ -25,18 +25,18 @@ public class UploadController {
     MarkovService markovService;
 
     /**
-     * This method intializes an endpoint for accepting
+     * This method initializes an endpoint for accepting
      * a text file and some optional parameters to be transformed
      * via Markov chain.
      * @param file File containing text that will used to create chain
      * @param n Size of the prefix, which determines how many
      *               adjacent words must be grouped together to create a
      *               prefix, defaults to 1
-     * @param length Number of words in the markov chain.  If length < 1,
-     *               the chain will continue to run until it chooses the
+     * @param length Maximum number of words in the markov chain.  If length is less
+     *               than 1, the chain will continue to run until it chooses the
      *               last word in the original string.
      * @param prefix The words that will begin the markov chain.
-     *               If empty, the chain will begin with the text
+     *               If empty, the chain will begin with the source
      *               file's first "n" words.
      * @return An object containing both our
      *               original text string from the uploaded file,
