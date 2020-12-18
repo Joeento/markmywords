@@ -33,25 +33,35 @@ public class MarkovService {
      * @return String of words representing our generated Markov Chain
      */
     public String chain(String text, int size, int maxWords, String prefix) {
+        // Creates table of prefixes as keys and suffix lists as values.
         String[] words = text.split(DELIMITER_REGEX);
         Map<String, ArrayList<String>> prefixes = buildPrefixTable(text, size);
 
+        // If a prefix is set, use it.  Otherwise default to the first "n" words in the source.
         prefix = (prefix == null) ? buildPrefixString(words, 0, size) :  prefix;
+
+        // If prefix is not found in the source, then it can't start a chain and is invalid
         if (!prefixes.containsKey(prefix)) {
             throw new BadParameterException("Sorry, your prefix needs to appear at least once in the text document " +
                     "and contain exactly " + size + " words.  To use a default prefix, leave out the 'prefix' field.");
         }
 
+        // String concatenation is famously inefficient, so we use a StringBuilder instead.
         Random random = new Random();
         StringBuilder result = new StringBuilder();
         result.append(prefix);
         int wordsAdded = size;
+
+        // Run until you reach the word maximum. If maxWords is not set, then run until
+        // we reach the final word in the source string.
         while (maxWords < 1 || wordsAdded < maxWords) {
             ArrayList<String> suffixes = prefixes.get(prefix);
             if (suffixes == null || suffixes.size() == 0) {
                 break;
             }
 
+            // Randomly choose a suffix from a weighted list of words that follow
+            // prefix in source
             int randomIndex = random.nextInt(suffixes.size());
             String suffix = suffixes.get(randomIndex);
 
@@ -62,6 +72,7 @@ public class MarkovService {
             result.append(suffix);
             wordsAdded++;
 
+            // `prefix` is to reset to the previous suffix and the n - 1 preceeding words.
             String[] previousPrefixWords = prefix.split(DELIMITER_REGEX);
             String previousPrefixSubString = buildPrefixString(previousPrefixWords, 1, previousPrefixWords.length);
             StringBuilder prefixBuilder = new StringBuilder();
@@ -74,6 +85,8 @@ public class MarkovService {
             prefixBuilder.append(suffix);
             prefix = prefixBuilder.toString();
         }
+
+        // Convert the StringBuilder back to a String and return the result
         return result.toString();
     }
 
