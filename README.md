@@ -48,7 +48,8 @@ MarkMyWords can basically be broken down into 3 parts: the *controller*, the *se
 Unfortunately, as with many projects, there were some cool features that I didn't come up with until it was too late to safely apply them.  So, I want to make a note in this document of several other ideas I had and hope to add in the     
 future:
 * **UI:** The great thing about RESTful applications is that they make the frontend totally backend agnostic.  So, since I didn't have enough Photoshop experience to make mock-ups, I thought it would be fun to build out a complete UI in React.  Unfortunately I didn't have time to integrate it into my Java build, but I did enclose pictures below!
-  ![Sample MarkMyWords UI](https://i.imgur.com/C1xoFuh.pngg)  
+  ![Sample MarkMyWords UI](https://i.imgur.com/C1xoFuh.pngg)
+  ![Sample MarkMyWords Mobile UI](https://i.imgur.com/blUOLjH.png)
   You can also check out the code itself on GitHub [here](https://github.com/Joeento/markmywords-client).
 
 * **Threading/JDBC:**  This may be beyond the scope of the project, but I'm very curious what would happen if you had an impossibly long source text.  For example, what if your text file included an entire Harry Potter book?  Would the result make more or less sense?  Unfortunately, I am not sure this version of MarkMyWords could handle a file over 100MB gracefully.  One idea I had to improve on it was to abstract the Markov algorithm into a thread that runs independent of the main thread.  Basically, on upload, the file and parameter are saved in a jobs table in the database and the client is given a job_id.  Eventually, the table row is enqueued into a thread that runs independent of the main thread and processes the source text at its own speed.  While it is processing, the client can use the job_id to query progress, as well as get the result when the thread is complete, whether that's 30 seconds later or 2 days.
