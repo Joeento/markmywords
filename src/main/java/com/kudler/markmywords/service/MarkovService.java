@@ -20,7 +20,7 @@ public class MarkovService {
     // to determine which character denote the end of a word. "\\s+"
     // translates to "any number of whitespace characters in a row".
     public static final String DELIMITER_REGEX = "\\s+";
-    
+
     /**
      * Generate a Markov Chain by creating a prefix, and then
      * appending suffixes to it one at a time until we reach
@@ -34,33 +34,38 @@ public class MarkovService {
      */
     public String chain(String text, int size, int maxWords, String prefix) {
         String[] words = text.split(DELIMITER_REGEX);
-        StringBuilder result = new StringBuilder();
-        Random random = new Random();
-
-        prefix = (prefix == null) ? buildPrefixString(words, 0, size) :  prefix;
         Map<String, ArrayList<String>> prefixes = buildPrefixTable(text, size);
 
+        prefix = (prefix == null) ? buildPrefixString(words, 0, size) :  prefix;
         if (!prefixes.containsKey(prefix)) {
             throw new BadParameterException("Sorry, your prefix needs to appear at least once in the text document " +
                     "and contain exactly " + size + " words.  To use a default prefix, leave out the 'prefix' field.");
         }
 
-        ArrayList<String> suffixes = prefixes.get(prefix);
-        int randomIndex = random.nextInt(suffixes.size());
-        String suffix = suffixes.get(randomIndex);
+        Random random = new Random();
+        StringBuilder result = new StringBuilder();
         result.append(prefix);
-        if (suffix.equals(NONWORD)) {
-            return result.toString();
-        }
+        int wordsAdded = size;
+        while (maxWords < 1 || wordsAdded < maxWords) {
+            ArrayList<String> suffixes = prefixes.get(prefix);
+            if (suffixes == null || suffixes.size() == 0) {
+                break;
+            }
 
-        result.append(" ");
-        result.append(suffix);
-        int wordsAdded = size + 1;
-        while (!suffix.equals(NONWORD) && (maxWords < 1 || wordsAdded < maxWords)) {
+            int randomIndex = random.nextInt(suffixes.size());
+            String suffix = suffixes.get(randomIndex);
+
+            if (suffix.equals(NONWORD)) {
+                break;
+            }
+            result.append(" ");
+            result.append(suffix);
+            wordsAdded++;
+
             String[] previousPrefixWords = prefix.split(DELIMITER_REGEX);
-            String previousPrefixOffset = buildPrefixString(previousPrefixWords, 1, previousPrefixWords.length);
+            String previousPrefixSubString = buildPrefixString(previousPrefixWords, 1, previousPrefixWords.length);
             StringBuilder prefixBuilder = new StringBuilder();
-            prefixBuilder.append(previousPrefixOffset);
+            prefixBuilder.append(previousPrefixSubString);
 
             if (size > 1) {
                 prefixBuilder.append(" ");
@@ -68,16 +73,10 @@ public class MarkovService {
 
             prefixBuilder.append(suffix);
             prefix = prefixBuilder.toString();
+        }
+        return result.toString();
+    }
 
-            suffixes = prefixes.get(prefix);
-            if (suffixes == null || suffixes.size() == 0) {
-                break;
-            }
-
-            randomIndex = random.nextInt(suffixes.size());
-            suffix = suffixes.get(randomIndex);
-            if (suffix.equals(NONWORD)) {
-                break;
     /**
      * Helper method to create data structure containing
      * every adjacent word grouping - or "prefix" in our
@@ -111,13 +110,10 @@ public class MarkovService {
             if (!prefixes.containsKey(prefix)) {
                 prefixes.put(prefix, new ArrayList<>());
             }
-
-            result.append(" ");
-            result.append(suffix);
-            wordsAdded++;
-
+            prefixes.get(prefix).add(suffix);
         }
-        return result.toString();
+
+        return prefixes;
     }
 
     /**
