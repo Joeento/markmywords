@@ -42,18 +42,18 @@ The most important part of our API our exposed endpoint.  Below, you will find t
 
 * **Success Response:**
 
-**Code:** 200 <br />      
-**Content:** `{      
+  **Code:** 200 <br />      
+  **Content:** `{      
 "original": "One black beetle bled only black blood but the other black beetle bled blue\n", "result": "One black blood but the other black blood but the other black beetle bled blue" }`
 * **Error Response Example:**
 
-**Code:** 400 BAD REQUEST <br />      
-**Content:** `{"type": "BadParameterException",      
+  **Code:** 400 BAD REQUEST <br />      
+  **Content:** `{"type": "BadParameterException",      
 "message": "Sorry, one of your parameters was invalid.  Please make sure you have a 'file' field of type 'File' that contains at least one word.", "status": "BAD_REQUEST" }`
 
-**Sample Call:**
+  **Sample Call:**
 
-```curl --location --request POST 'localhost:8080/upload' \ --form 'file=@/Users/ekudler/Downloads/beetle.txt' \ --form 'n=2' \ --form 'length=8' \ --form 'prefix=the other'```
+  ```curl --location --request POST 'localhost:8080/upload' \ --form 'file=@/Users/ekudler/Downloads/beetle.txt' \ --form 'n=2' \ --form 'length=8' \ --form 'prefix=the other'```
 
 ### Components
 MarkMyWords can basically be broken down into 3 parts: the *controller*, the *services* and the *error handling*.  Since we are building a RESTful API, the controller only needs to serve an endpoint that receives parameters and sends back the result.  The *services* are designed to help the controller handle any business logic- such as generating the Markov Chain - without needing any data on our server's state.  If we wanted to, we could even generate chains using other input sources, without needing to change the MarkovService class at all.  Finally, we have the exceptions.  Normally in an application, we catch exceptions inside of the methods that invoke `Throwable`s.  However, when the user only has access to one entry point in our application, it doesn't really matter much to them what piece failed.  As such, in this project we use Spring's @RestControllerAdvice to create a central class for catching exceptions and turning them into  JSON response.
