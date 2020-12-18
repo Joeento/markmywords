@@ -3,7 +3,7 @@
 # Mark(ov) My Words!
 
 ### Intro
-Markov Chains are a great thought experiment
+Markov Chains are a great thought experiment.  Rooted in state-based automata, but dependent on random guessing, Markov Chain's are an interesting cross between pattern finding and wild guesses.  In this project, I hope to get a better understanding of what Markov Chains are, how they work and how we can use this algorithm in real world applications.  
 ### Endpoint
 The most important part of our API our exposed endpoint.  Below, you will find the documentation of generating a chain, including the URL, parameters and response.
 
