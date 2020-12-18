@@ -16,6 +16,7 @@ However if you would like to build from source, you will need to run
 ./gradlew bootRun
 ```
 And accessible via http://localhost:8080/upload.
+
 NOTE: Config variables are stored in the `src/main/java/resources/application.properties` folder.  If you would like to change the directory to which files upload, you can set `app.upload.dir`.  You can also set the default port using `server.port=8081` and the file upload size by changing `spring.servlet.multipart.max-file-size`
 ### Endpoint
 The most important part of our API our exposed endpoint.  Below, you will find the documentation of generating a chain, including the URL, parameters and response.
